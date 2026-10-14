@@ -2,6 +2,8 @@
 package "Magic486/moonnetlink/fixtures"
 
 // Values
+pub fn family_journal_text() -> String
+
 pub fn journal_text() -> String
 
 // Errors
