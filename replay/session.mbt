@@ -52,6 +52,14 @@ pub fn Session::apply(
 
 ///|
 /// Feed one JSONL record. Malformed JSON/schema is a rejected, loss-bearing record.
+///
+/// ```mbt check
+/// test {
+///   let session = @replay.Session::new()
+///   session.apply_line("{\"version\":1,\"kind\":\"loss\",\"reason\":\"demo\"}")
+///   inspect(session.summary().losses, content="1")
+/// }
+/// ```
 pub fn Session::apply_line(
   self : Session,
   line : String,

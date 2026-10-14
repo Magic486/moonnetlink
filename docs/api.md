@@ -1,6 +1,6 @@
 # API 与使用约定
 
-导入路径为 `Magic486/moonnetlink/<package>`，模块版本 0.1.0。公开接口以各包的 `pkg.generated.mbti` 为准；原生接口另见构建器生成的 [native-api.mbti](native-api.mbti)。安装与发布信息见 [交付说明](release.md)。
+导入路径为 `Magic486/moonnetlink/<package>`，开发版本 0.2.0。公开接口以各包的 `pkg.generated.mbti` 为准；原生接口另见构建器生成的 [native-api.mbti](native-api.mbti)。安装与发布信息见 [交付说明](release.md)。
 
 ## 协议解码
 
@@ -27,3 +27,13 @@
 `dump(kind, timeout_ms=5000)` 返回 Capture（events、datagrams、endian），有匹配 DONE、总超时和 4096 份报文预算。`receive(timeout_ms=2000)` 返回 `Bytes?`；None 只表示超时，传输损失抛错误。`send(message)` 是底层接口，不是网络修改便捷 API。`NativeError(message, errno)` 保留平台错误码。原生 socket 只支持 Linux。
 
 CLI 命令见 README。快照的四类查询并非同一时刻；watch 从订阅时开始观察，不自动建立完整基线。记录重放不需要网络权限。
+
+## 0.2.0 新增接口
+
+`@route.decode_next_hops(payload, family, endian=...)` / `Route::next_hops(endian=...)` 返回 index、flags、weight、gateway 与未知属性；weight 为 rtnh_hops+1，必须传入原始端序。短头、长度、padding 和非法 IP 全部检查。依赖网卡删除时，缓存保守清除该路由；复杂路由语义以重新 dump 为准。
+
+`@genl.decode` / `encode` 处理 Generic envelope 与 user header；`family_request` / `decode_family` 处理 controller 元数据。Lookup 要求同 seq/name 的 metadata 和成功 ACK，不能用单个 ACK 假装完成。
+
+`@native.Socket::open(protocol=Generic)` 打开 NETLINK_GENERIC，`family(name)` 返回 FamilyCapture。CLI family/family-replay 为只读 controller 查询与重放；不包含 policy 查询或组订阅。
+
+`@replay.Session` 支持 typed Record、逐行 JSONL 与增量文本；summary 包含 records/datagrams/losses/rejected 和隔离状态视图。失败标记 stale 并抛错，先前完整记录保留。Session 解释 rtnetlink，Generic 使用相应 Lookup；v1 日志不会自动识别协议。

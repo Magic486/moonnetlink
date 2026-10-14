@@ -124,6 +124,13 @@ pub fn decode_family(
 
 ///|
 /// Read-only CTRL_CMD_GETFAMILY with REQUEST|ACK. Names fit Linux GENL_NAMSIZ.
+///
+/// ```mbt check
+/// test {
+///   let request = @genl.family_request("nlctrl", 7U)
+///   inspect(request.header.sequence, content="7")
+/// }
+/// ```
 pub fn family_request(
   name : String,
   sequence : UInt32,
