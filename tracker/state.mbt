@@ -127,8 +127,14 @@ pub fn State::ingest(
   data : Bytes,
   endian~ : @wire.Endian = @wire.Little,
 ) -> Unit raise @wire.ProtocolError {
-  let messages = @wire.decode(data, endian~)
-  let events = messages.map(m => @route.decode(m, endian~))
+  let messages = {
+    errdefer self.mark_stale("malformed Netlink datagram")
+    @wire.decode(data, endian~)
+  }
+  let events = {
+    errdefer self.mark_stale("malformed route event")
+    messages.map(m => @route.decode(m, endian~))
+  }
   for message in messages {
     if (message.header.flags & 0x10) != 0 {
       self.mark_stale("interrupted dump")
