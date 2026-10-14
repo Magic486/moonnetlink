@@ -1,0 +1,70 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Magic486/moonnetlink/genl"
+
+import {
+  "Magic486/moonnetlink/wire",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn decode(Bytes, user_header_size? : Int, endian? : @wire.Endian) -> Envelope raise @wire.ProtocolError
+
+pub fn decode_family(@wire.Message, endian? : @wire.Endian) -> Family raise @wire.ProtocolError
+
+pub fn encode(Envelope, endian? : @wire.Endian) -> Bytes raise @wire.ProtocolError
+
+pub fn family_request(String, UInt, endian? : @wire.Endian) -> @wire.Message raise @wire.ProtocolError
+
+// Errors
+
+// Types and methods
+pub(all) struct Envelope {
+  command : Int
+  version : Int
+  reserved : Int
+  user_header : Bytes
+  attributes : Array[@wire.Attribute]
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Envelope::equal(Self, Self) -> Bool
+pub fn Envelope::not_equal(Self, Self) -> Bool
+pub fn Envelope::to_json(Self) -> Json
+pub fn Envelope::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Family {
+  id : Int
+  name : String
+  version : UInt?
+  header_size : UInt?
+  max_attribute : UInt?
+  operations : Array[Operation]
+  groups : Array[Group]
+  attributes : Array[@wire.Attribute]
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Family::equal(Self, Self) -> Bool
+pub fn Family::not_equal(Self, Self) -> Bool
+pub fn Family::to_json(Self) -> Json
+pub fn Family::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Group {
+  id : UInt
+  name : String
+  attributes : Array[@wire.Attribute]
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Group::equal(Self, Self) -> Bool
+pub fn Group::not_equal(Self, Self) -> Bool
+pub fn Group::to_json(Self) -> Json
+pub fn Group::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Operation {
+  id : UInt
+  flags : UInt
+  attributes : Array[@wire.Attribute]
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Operation::equal(Self, Self) -> Bool
+pub fn Operation::not_equal(Self, Self) -> Bool
+pub fn Operation::to_json(Self) -> Json
+pub fn Operation::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits
