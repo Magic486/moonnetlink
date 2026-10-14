@@ -2,9 +2,11 @@
 
 ```mermaid
 flowchart LR
-  K[Linux NETLINK_ROUTE] --> C[C socket / poll / recvmsg]
+  K[Linux NETLINK_ROUTE / GENERIC] --> C[C socket / poll / recvmsg]
   C --> W[MoonBit wire: header + TLV]
   W --> R[route: typed event]
+  W --> G[genl: family metadata / ACK transaction]
+  G --> CLI
   R --> D[Dump: seq + DONE]
   R --> S[State: observations + loss]
   C --> J[journal: raw bytes + endian]

@@ -20,9 +20,10 @@ moon run cmd/moonnet --target native -- replay demo-output/demo-snapshot.jsonl
 ```sh
 moon run examples/kernel_replay --target wasm-gc
 moon run examples/kernel_replay --target js
+moon run examples/family_replay --target wasm-gc
 ```
 
-展示 32 条真实内核事件，包括 IPv4/IPv6、四类对象的增删，最后对象清空且 stale=false。解释这些来自临时网络命名空间，不是手写成功输出。
+展示 32 条真实内核事件，包括 IPv4/IPv6、四类对象增删，最后对象清空且 stale=false。再展示真实 controller capture 的 family、operations、notify group；这些来自实机，不是手写成功输出。
 
 ## 120–180 秒：效果与可信度
 
