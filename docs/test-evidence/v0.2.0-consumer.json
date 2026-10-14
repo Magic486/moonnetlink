@@ -1,0 +1,9 @@
+{
+  "version": "0.2.0",
+  "source": "registry",
+  "portable_consumer_tests": true,
+  "linux_native": {
+    "link_events": 13,
+    "controller": "nlctrl"
+  }
+}

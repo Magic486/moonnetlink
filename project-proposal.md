@@ -107,3 +107,9 @@ socket.close()
 当前十月赛事官网为 [Hackathon2026](https://moonbitlang.github.io/Hackathon2026/)，页面内容显示报名与验收截至 **2026-10-31**，关注真实需求、工程边界、测试、开源合规和维护价值。不能拿早期 OSC 或 SCC 的时间和百分比当成本期规则。获奖由实际评审决定。
 
 最初依用户要求先本地开发，之后按新指令准备 [Magic486/moonnetlink](https://github.com/Magic486/moonnetlink) 公开仓库与 Mooncakes 发布。发布证据见 docs/release.md。公开历史从真实首次导入开始，不补造此前公开提交。报名、入群和官方验收仍需按赛事流程完成，技术验证不等同正式审核通过。
+
+## 0.2.0 已完成的后续扩展
+
+在原 MVP 之上完成加权多路径解析和依赖清理、Generic controller 元数据/ACK 事务与 Linux family 录制查询、增量 replay SDK、缓存属性隔离、可执行 API 文档及独立包消费 CI。Generic 范围为 discovery，并未扩大为完整协议操作框架。三后端最终测试为 WASM-GC/JS 各 87、Linux native 96；0.2.0 已发布至 Magic486 的 Mooncakes 模块，详情见 docs/release.md。
+
+本期展示现在可直接查询 `nlctrl` 的 operation/group，并跨后端重放其真实记录；Route 演示仍使用 32 条隔离环境事件和明确标注的合成失效场景。一页正式申报材料见 submission-proposal.md 与 output/pdf/MoonNetlink-proposal-0.2.0.pdf。

@@ -1,0 +1,32 @@
+{
+  "materials_date": "2026-10-15",
+  "github": {
+    "repository": "https://github.com/Magic486/moonnetlink",
+    "default_branch": "main",
+    "visibility": "PUBLIC",
+    "frozen_code_commit": "b35dca13c939a39d9697e9ea6c037531943d8ddf",
+    "frozen_code_ci": "https://github.com/Magic486/moonnetlink/actions/runs/38600644676",
+    "ci_conclusion": "success",
+    "wasm_gc_tests": 87,
+    "js_tests": 87,
+    "linux_native_tests": 96,
+    "isolated_events": 32
+  },
+  "mooncakes": {
+    "module": "Magic486/moonnetlink",
+    "version": "0.2.0",
+    "url": "https://mooncakes.io/docs/Magic486/moonnetlink@0.2.0",
+    "publish_http_status": 200,
+    "packaged_files_at_publish": 106,
+    "license": "MIT"
+  },
+  "consumer": {
+    "dependency_source": "public registry, exact version 0.2.0",
+    "toolchain": "moon 0.1.20261012",
+    "windows": {"wasm_gc_tests": 1, "js_tests": 1},
+    "linux": {"wasm_gc_tests": 1, "js_tests": 1, "native_tests": 1},
+    "native_link_events": 13,
+    "generic_controller": "nlctrl"
+  },
+  "official_acceptance": "not claimed; software evidence is separate from registration and organizer review"
+}

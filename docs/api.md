@@ -1,6 +1,6 @@
 # API 与使用约定
 
-导入路径为 `Magic486/moonnetlink/<package>`，开发版本 0.2.0。公开接口以各包的 `pkg.generated.mbti` 为准；原生接口另见构建器生成的 [native-api.mbti](native-api.mbti)。安装与发布信息见 [交付说明](release.md)。
+导入路径为 `Magic486/moonnetlink/<package>`，已发布版本 0.2.0。公开接口以各包的 `pkg.generated.mbti` 为准；原生接口另见构建器生成的 [native-api.mbti](native-api.mbti)。安装与发布信息见 [交付说明](release.md)。
 
 ## 协议解码
 

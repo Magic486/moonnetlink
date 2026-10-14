@@ -1,5 +1,24 @@
 # 本地验证报告
 
+## 0.2.0 最终功能验证
+
+材料日期：2026-10-15。以下为 2026-10-12 官方工具链的最终功能结果；后文保留首次 MVP 基线，避免混用版本或计数。
+
+| 检查 | 结果 |
+|---|---|
+| Windows WASM-GC / JavaScript，deny-warn | 各 87 / 87 |
+| Linux native，deny-warn | 96 / 96 |
+| 格式、原生构建、三个离线示例 | 通过；合成 7 步、真实 Route 32 步、Generic 1 步跨后端一致 |
+| 实机查询与隔离事件 | iproute2 独立比较通过；32 条隔离事件重放一致 |
+| Generic controller | nlctrl metadata+ACK、组/操作发现、录制重放及未知 family 错误验证通过 |
+| 0.2.0 注册表安装 | Windows WASM-GC/JS 与 Linux 三后端各 1 项独立消费者测试通过；native 查询 13 个 link 事件与 nlctrl |
+
+新增回归覆盖多路径长度/填充与权重、依赖清理、Generic 元数据与 ACK 顺序/关联、错误后的失效、缓存属性数组隔离、增量重放以及可执行文档。实际归档消费 CI 另增加 1 项消费者测试，库自身计数仍为 87/96。
+
+详见 [本期 Linux 汇总](test-evidence/v0.2.0-linux.json)、[注册表消费汇总](test-evidence/v0.2.0-consumer.json)、[公开 CI 与发布证据](release.md)。主机 IP、网络原始快照及 SSH 资料不进入公开证据。
+
+## 0.1.0 首次 MVP 历史基线
+
 验证日期：2026-10-14。以下为 Windows 开发环境与 SSH Linux 测试环境的实测结果。公开发布后的 CI 与安装验证另见 [交付说明](release.md)。
 
 ## 本地 MVP 基线检查
