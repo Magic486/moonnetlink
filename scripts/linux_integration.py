@@ -76,6 +76,17 @@ def cli_test():
     demo=json.loads(run(BINARY,'demo').stdout)
     assert demo['source']=='synthetic-demo' and demo['state']['stale']
     return checks+[{'contract':'bad journal version rejected, synthetic loss clearly labelled','passed':True}]
+
+def family_test():
+    record=OUT/'controller.jsonl'
+    family=json.loads(run(BINARY,'family','nlctrl','--record',record).stdout)['family']
+    replay=json.loads(run(BINARY,'family-replay',record).stdout)['family']
+    assert family==replay, 'controller record/replay drift'
+    assert family['id']==16 and family['name']=='nlctrl'
+    assert any(op['id']==3 for op in family['operations'])
+    unknown=run(BINARY,'family','mn-no-such-fam',check=False)
+    assert unknown.returncode==1 and not unknown.stdout and 'error' in json.loads(unknown.stderr)
+    return {'name':family['name'],'id':family['id'],'operation_count':len(family['operations']),'group_count':len(family['groups']),'replay_equal':True,'missing_family_rejected':True}
 def namespace_events():
     # This function is launched only within a fresh network namespace.
     assert os.environ.get('MOONNETLINK_ISOLATED')=='1'
@@ -118,7 +129,7 @@ def namespace_events():
 def main():
     parser=argparse.ArgumentParser(); parser.add_argument('--namespace-worker',action='store_true'); args=parser.parse_args()
     if args.namespace_worker:namespace_events();return
-    report={'platform':os.uname().sysname,'kernel':os.uname().release,'toolchain':run(str(pathlib.Path.home()/'.moon/bin/moon'),'version','--all').stdout,'snapshot':snapshot_test(),'cli':cli_test()}
+    report={'platform':os.uname().sysname,'kernel':os.uname().release,'toolchain':run('moon','version','--all').stdout,'snapshot':snapshot_test(),'cli':cli_test(),'generic_controller':family_test()}
     # Only this temporary namespace worker can alter network configuration.
     probe=run('sudo','-n','unshare','-n','true',check=False)
     if probe.returncode==0:

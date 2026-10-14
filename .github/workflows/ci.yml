@@ -26,3 +26,5 @@ jobs:
           moon test --target native --deny-warn
           moon build cmd/moonnet --target native
           python3 scripts/linux_integration.py
+      - name: Verify packaged public APIs in an independent consumer
+        run: python3 scripts/verify-package.py
