@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Magic486/moonnetlink/scenarios"
+
+import {
+  "Magic486/moonnetlink/journal",
+  "Magic486/moonnetlink/wire",
+}
+
+// Values
+pub fn address(deleted? : Bool) -> @wire.Message raise @wire.ProtocolError
+
+pub fn control(Int, sequence? : UInt, flags? : Int, code? : Int) -> @wire.Message
+
+pub fn link(index? : Int, name? : String, mtu? : UInt, deleted? : Bool, endian? : @wire.Endian) -> @wire.Message raise @wire.ProtocolError
+
+pub fn neighbor(state? : Int, mac? : Bytes, deleted? : Bool) -> @wire.Message raise @wire.ProtocolError
+
+pub fn route(deleted? : Bool) -> @wire.Message raise @wire.ProtocolError
+
+pub fn trace() -> Array[@journal.Record] raise @wire.ProtocolError
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

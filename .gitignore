@@ -1,0 +1,18 @@
+_build/
+target/
+.moon/
+.repos/
+__pycache__/
+*.o
+*.exe
+demo-output/
+research/source-bundle.tar.gz
+source-bundle.tar.gz
+# Local research downloads, machine connections and publishing scratch files
+/research/
+/release-local/
+/scripts/sync-linux.ps1
+/scripts/prepare-publication.py
+/scripts/explicit-traits.py
+/docs/completion-audit.md
+/acceptance-local.md

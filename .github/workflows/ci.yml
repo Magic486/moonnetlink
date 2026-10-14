@@ -1,0 +1,28 @@
+name: MoonNetlink checks
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install MoonBit official toolchain
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Verify formatting and core backends
+        run: |
+          moon version --all
+          moon fmt --check
+          moon check --target wasm-gc --deny-warn
+          moon test --target wasm-gc --deny-warn
+          moon test --target js --deny-warn
+          python3 scripts/verify-portable.py
+      - name: Verify Linux transport and independent integration
+        run: |
+          moon check --target native --deny-warn
+          moon test --target native --deny-warn
+          moon build cmd/moonnet --target native
+          python3 scripts/linux_integration.py

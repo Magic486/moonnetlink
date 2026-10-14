@@ -1,0 +1,19 @@
+# Keep published contents reproducible and free of local recordings/credentials.
+_build/
+target/
+.moon/
+.repos/
+__pycache__/
+*.o
+*.exe
+demo-output/
+research/
+release-local/
+scripts/sync-linux.ps1
+scripts/prepare-publication.py
+scripts/explicit-traits.py
+docs/completion-audit.md
+acceptance-local.md
+# Hosting automation belongs in the source repository, not the library archive.
+.github/
+.git/

@@ -1,0 +1,7 @@
+import {
+  "Magic486/moonnetlink/scenarios",
+  "Magic486/moonnetlink/tracker",
+  "Magic486/moonnetlink/journal",
+}
+
+pkgtype(kind: "executable")

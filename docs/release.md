@@ -1,0 +1,22 @@
+# 0.1.0 发布与验收材料
+
+源码目标：[Magic486/moonnetlink](https://github.com/Magic486/moonnetlink)。模块目标：`Magic486/moonnetlink@0.1.0`。当前正在执行首次公开发布；最终发布结果、CI 链接和独立安装验证将在成功后更新。
+
+## 技术交付证据
+
+| 项目 | 证据 |
+|---|---|
+| MoonBit 主要实现 | wire、route、tracker、journal；C 仅负责系统调用和 I/O |
+| 能够运行与测试 | README、两个跨后端示例、54 核心测试与 5 原生测试 |
+| 独立验证 | Linux iproute2 字段差分与临时 namespace 的 32 条真实事件 |
+| 开源合规 | MIT、THIRD_PARTY、隔离测试数据来源说明 |
+| AI 可解释 | architecture、API、development 复盘 |
+| 安装与持续检查 | 首次发布与公开 CI 确认后补充本页 |
+
+原始调研抓取、构建目录、发布临时文件、真实主机网络快照、账户凭据、SSH 连接脚本均不分发；保留独立隔离实验产生的必要 fixture。包与仓库清单在上传前单独检查。
+
+## 赛事流程边界
+
+依据 [当前十月赛官网](https://moonbitlang.github.io/Hackathon2026/)，需公开可追踪开发、README/示例/测试、开源与 AI 说明，并在 2026-10-31 前走报名及验收流程。首次公开源码导入发生在本地 MVP 完成后；不声称此前已公开持续提交。无法补造已有开发历史，后续实际维护记录将如实保留。
+
+本页为技术材料核对，不是官方审核结论。报名的一页说明见根目录 submission-proposal.md。报名表中的个人/团队资料、入群昵称以及赛事方审核需由参赛者完成或另行明确授权。

@@ -1,0 +1,70 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Magic486/moonnetlink/tracker"
+
+import {
+  "Magic486/moonnetlink/route",
+  "Magic486/moonnetlink/wire",
+  "moonbitlang/core/debug",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct Dump {
+  sequence : UInt
+  kind : @route.ObjectKind
+  mut status : DumpStatus
+  events : Array[@route.Event]
+} derive(@debug.Debug)
+pub fn Dump::accept(Self, @wire.Message, endian? : @wire.Endian) -> Bool raise @wire.ProtocolError
+pub fn Dump::new(UInt, @route.ObjectKind) -> Self
+pub fn Dump::result(Self) -> Array[@route.Event] raise @wire.ProtocolError
+pub fn Dump::status(Self) -> DumpStatus
+pub fn Dump::to_repr(Self) -> @debug.Repr
+
+pub(all) enum DumpStatus {
+  Pending
+  Complete
+  Failed(String)
+} derive(Eq, ToJson, @debug.Debug)
+pub fn DumpStatus::equal(Self, Self) -> Bool
+pub fn DumpStatus::not_equal(Self, Self) -> Bool
+pub fn DumpStatus::to_json(Self) -> Json
+pub fn DumpStatus::to_repr(Self) -> @debug.Repr
+
+pub struct State {
+  links : Map[Int, @route.Link]
+  addresses : Map[String, @route.Address]
+  routes : Map[String, @route.Route]
+  neighbors : Map[String, @route.Neighbor]
+  mut stale : Bool
+  reasons : Array[String]
+  mut applied_events : Int
+} derive(@debug.Debug)
+pub fn State::apply(Self, @route.Event) -> Unit
+pub fn State::ingest(Self, Bytes, endian? : @wire.Endian) -> Unit raise @wire.ProtocolError
+pub fn State::mark_stale(Self, String) -> Unit
+pub fn State::new() -> Self
+pub fn State::to_repr(Self) -> @debug.Repr
+pub fn State::view(Self) -> View
+
+pub(all) struct View {
+  links : Array[@route.Link]
+  addresses : Array[@route.Address]
+  routes : Array[@route.Route]
+  neighbors : Array[@route.Neighbor]
+  stale : Bool
+  starts_partial : Bool
+  reasons : Array[String]
+  applied_events : Int
+} derive(Eq, ToJson, @debug.Debug)
+pub fn View::equal(Self, Self) -> Bool
+pub fn View::not_equal(Self, Self) -> Bool
+pub fn View::to_json(Self) -> Json
+pub fn View::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits

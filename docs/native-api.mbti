@@ -1,0 +1,57 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "matrix486/moonnetlink/native"
+
+import {
+  "matrix486/moonnetlink/route",
+  "matrix486/moonnetlink/wire",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn exit(Int) -> Unit
+
+pub fn flush_stdout() -> Unit
+
+pub fn host_endian() -> @wire.Endian
+
+pub fn is_linux() -> Bool
+
+pub fn monotonic_ms() -> Int64
+
+pub fn read_text(String) -> String raise
+
+pub fn write_stderr(String) -> Unit
+
+pub fn write_text(String, String, append? : Bool) -> Unit raise
+
+// Errors
+pub(all) suberror NativeError {
+  NativeError(String, Int)
+} derive(@debug.Debug)
+pub fn NativeError::to_repr(Self) -> @debug.Repr
+
+// Types and methods
+pub(all) struct Capture {
+  events : Array[@route.Event]
+  datagrams : Array[Bytes]
+  endian : @wire.Endian
+} derive(ToJson, @debug.Debug)
+pub fn Capture::to_json(Self) -> Json
+pub fn Capture::to_repr(Self) -> @debug.Repr
+
+type Handle
+
+pub struct Socket {
+  handle : Handle
+  mut sequence : UInt
+  endian : @wire.Endian
+}
+pub fn Socket::close(Self) -> Unit
+pub fn Socket::dump(Self, @route.ObjectKind, timeout_ms? : Int) -> Capture raise
+pub fn Socket::open(groups? : UInt) -> Self raise NativeError
+pub fn Socket::receive(Self, timeout_ms? : Int) -> Bytes? raise
+pub fn Socket::send(Self, @wire.Message) -> Unit raise
+
+// Type aliases
+
+// Traits

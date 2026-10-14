@@ -1,0 +1,13 @@
+{
+  "event_count": 32,
+  "datagrams": 32,
+  "types": [
+    "AddressChanged",
+    "LinkChanged",
+    "NeighborChanged",
+    "RouteChanged"
+  ],
+  "replay_equal": true,
+  "final_objects": 0,
+  "host_network_untouched": true
+}

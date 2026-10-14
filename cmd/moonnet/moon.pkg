@@ -1,0 +1,13 @@
+supported_targets = "native"
+
+import {
+  "Magic486/moonnetlink/native",
+  "Magic486/moonnetlink/wire",
+  "Magic486/moonnetlink/route",
+  "Magic486/moonnetlink/tracker",
+  "Magic486/moonnetlink/journal",
+  "Magic486/moonnetlink/scenarios",
+  "moonbitlang/core/env",
+}
+
+pkgtype(kind: "executable")

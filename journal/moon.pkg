@@ -1,0 +1,4 @@
+import {
+  "Magic486/moonnetlink/wire",
+  "moonbitlang/core/json",
+}

@@ -1,0 +1,10 @@
+import {
+  "Magic486/moonnetlink/wire",
+  "Magic486/moonnetlink/route",
+}
+
+import {
+  "Magic486/moonnetlink/scenarios",
+  "Magic486/moonnetlink/fixtures",
+  "Magic486/moonnetlink/journal",
+} for "test"

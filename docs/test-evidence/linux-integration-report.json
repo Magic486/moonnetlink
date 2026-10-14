@@ -1,0 +1,81 @@
+{
+  "platform": "Linux",
+  "kernel": "7.0.0-38-generic",
+  "toolchain": "moon 0.1.20260920 (914d7da 2026-09-20)\nmoonc v0.10.14+7d59c7ec9 (2026-09-18)\nmoonrun 0.1.20260920 (914d7da 2026-09-20)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+  "snapshot": [
+    {
+      "category": "link (index,name,mtu,hardware address)",
+      "matched": 13
+    },
+    {
+      "category": "address (index,family,prefix,local)",
+      "matched": 21
+    },
+    {
+      "category": "route (family,table,prefix,gateway,interface,metric)",
+      "matched": 68
+    },
+    {
+      "category": "neighbor (family,interface,IP)",
+      "matched": 69
+    },
+    {
+      "category": "neighbor nonempty hardware address",
+      "matched": 67,
+      "empty_kernel_attributes_not_compared": 2,
+      "reason": "Absent or zero-length NDA_LLADDR is preserved; hardware-address comparison covers only nonempty kernel attributes. All neighbor identities are compared."
+    }
+  ],
+  "cli": [
+    {
+      "arguments": [
+        "wat"
+      ],
+      "exit_code": 1,
+      "error_json": true
+    },
+    {
+      "arguments": [
+        "watch",
+        "0",
+        "demo-output/invalid.jsonl"
+      ],
+      "exit_code": 1,
+      "error_json": true
+    },
+    {
+      "arguments": [
+        "watch",
+        "999",
+        "demo-output/invalid.jsonl"
+      ],
+      "exit_code": 1,
+      "error_json": true
+    },
+    {
+      "arguments": [
+        "replay",
+        "demo-output/absent.jsonl"
+      ],
+      "exit_code": 1,
+      "error_json": true
+    },
+    {
+      "contract": "bad journal version rejected, synthetic loss clearly labelled",
+      "passed": true
+    }
+  ],
+  "isolated_events": {
+    "event_count": 32,
+    "datagrams": 32,
+    "types": [
+      "AddressChanged",
+      "LinkChanged",
+      "NeighborChanged",
+      "RouteChanged"
+    ],
+    "replay_equal": true,
+    "final_objects": 0,
+    "host_network_untouched": true
+  }
+}

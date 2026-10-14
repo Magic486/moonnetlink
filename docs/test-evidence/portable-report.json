@@ -1,0 +1,20 @@
+[
+  {
+    "example": "replay",
+    "steps": 7,
+    "targets": [
+      "wasm-gc",
+      "js"
+    ],
+    "all_steps_equal": true
+  },
+  {
+    "example": "kernel_replay",
+    "steps": 32,
+    "targets": [
+      "wasm-gc",
+      "js"
+    ],
+    "all_steps_equal": true
+  }
+]

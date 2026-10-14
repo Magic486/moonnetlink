@@ -1,0 +1,130 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Magic486/moonnetlink/route"
+
+import {
+  "Magic486/moonnetlink/wire",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn decode(@wire.Message, endian? : @wire.Endian) -> Event raise @wire.ProtocolError
+
+pub fn hardware_address(Bytes) -> String
+
+pub fn ip_address(Bytes, Int) -> String raise @wire.ProtocolError
+
+pub fn request(ObjectKind, UInt) -> @wire.Message
+
+// Errors
+
+// Types and methods
+pub(all) struct Ack {
+  code : Int
+  message : String?
+  bad_offset : UInt?
+  attributes : Array[@wire.Attribute]
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Ack::equal(Self, Self) -> Bool
+pub fn Ack::not_equal(Self, Self) -> Bool
+pub fn Ack::to_json(Self) -> Json
+pub fn Ack::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Address {
+  index : UInt
+  family : Int
+  prefix_length : Int
+  flags : UInt
+  scope : Int
+  local_address : String?
+  address : String?
+  label : String?
+  attributes : Array[@wire.Attribute]
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Address::equal(Self, Self) -> Bool
+pub fn Address::not_equal(Self, Self) -> Bool
+pub fn Address::to_json(Self) -> Json
+pub fn Address::to_repr(Self) -> @debug.Repr
+
+pub(all) enum Event {
+  LinkChanged(Link, deleted~ : Bool)
+  AddressChanged(Address, deleted~ : Bool)
+  RouteChanged(Route, deleted~ : Bool)
+  NeighborChanged(Neighbor, deleted~ : Bool)
+  Acknowledged(Ack)
+  Done(Ack)
+  Overrun
+  Unknown(@wire.Message)
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Event::equal(Self, Self) -> Bool
+pub fn Event::not_equal(Self, Self) -> Bool
+pub fn Event::to_json(Self) -> Json
+pub fn Event::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Link {
+  index : Int
+  family : Int
+  hardware_type : Int
+  flags : UInt
+  name : String?
+  mtu : UInt?
+  operstate : Int?
+  address : String?
+  attributes : Array[@wire.Attribute]
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Link::equal(Self, Self) -> Bool
+pub fn Link::not_equal(Self, Self) -> Bool
+pub fn Link::to_json(Self) -> Json
+pub fn Link::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Neighbor {
+  family : Int
+  index : Int
+  state : Int
+  flags : Int
+  neighbor_type : Int
+  destination : String?
+  lladdr : String?
+  attributes : Array[@wire.Attribute]
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Neighbor::equal(Self, Self) -> Bool
+pub fn Neighbor::not_equal(Self, Self) -> Bool
+pub fn Neighbor::to_json(Self) -> Json
+pub fn Neighbor::to_repr(Self) -> @debug.Repr
+
+pub(all) enum ObjectKind {
+  Links
+  Addresses
+  Routes
+  Neighbors
+} derive(Eq, ToJson, @debug.Debug)
+pub fn ObjectKind::equal(Self, Self) -> Bool
+pub fn ObjectKind::not_equal(Self, Self) -> Bool
+pub fn ObjectKind::to_json(Self) -> Json
+pub fn ObjectKind::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Route {
+  family : Int
+  destination_prefix : Int
+  source_prefix : Int
+  tos : Int
+  table : UInt
+  protocol : Int
+  scope : Int
+  route_type : Int
+  flags : UInt
+  destination : String?
+  source : String?
+  gateway : String?
+  output_interface : UInt?
+  priority : UInt?
+  preferred_source : String?
+  attributes : Array[@wire.Attribute]
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Route::equal(Self, Self) -> Bool
+pub fn Route::not_equal(Self, Self) -> Bool
+pub fn Route::to_json(Self) -> Json
+pub fn Route::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits

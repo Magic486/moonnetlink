@@ -1,0 +1,90 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Magic486/moonnetlink/wire"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn align4(Int) -> Int raise ProtocolError
+
+pub fn copy_range(Bytes, Int, Int) -> Bytes raise ProtocolError
+
+pub fn cstring(Bytes) -> String raise ProtocolError
+
+pub fn decode(Bytes, endian? : Endian) -> Array[Message] raise ProtocolError
+
+pub fn decode_attributes(Bytes, endian? : Endian) -> Array[Attribute] raise ProtocolError
+
+pub fn encode(Message, endian? : Endian) -> Bytes raise ProtocolError
+
+pub fn encode_attributes(Array[Attribute], endian? : Endian) -> Bytes raise ProtocolError
+
+pub fn find_attribute(Array[Attribute], Int) -> Attribute?
+
+pub fn i32(Bytes, Int, endian? : Endian) -> Int raise ProtocolError
+
+pub fn string_payload(String) -> Bytes
+
+pub fn u16(Bytes, Int, endian? : Endian) -> Int raise ProtocolError
+
+pub fn u32(Bytes, Int, endian? : Endian) -> UInt raise ProtocolError
+
+pub fn uint_payload(UInt, endian? : Endian) -> Bytes
+
+pub fn write_u16(FixedArray[Byte], Int, Int, endian? : Endian) -> Unit raise ProtocolError
+
+pub fn write_u32(FixedArray[Byte], Int, UInt, endian? : Endian) -> Unit raise ProtocolError
+
+// Errors
+pub(all) suberror ProtocolError {
+  ProtocolError(String)
+} derive(@debug.Debug)
+pub fn ProtocolError::to_repr(Self) -> @debug.Repr
+
+// Types and methods
+pub(all) struct Attribute {
+  raw_kind : Int
+  payload : Bytes
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Attribute::children(Self, endian? : Endian) -> Array[Self] raise ProtocolError
+pub fn Attribute::equal(Self, Self) -> Bool
+pub fn Attribute::kind(Self) -> Int
+pub fn Attribute::nested(Self) -> Bool
+pub fn Attribute::network_order(Self) -> Bool
+pub fn Attribute::not_equal(Self, Self) -> Bool
+pub fn Attribute::to_json(Self) -> Json
+pub fn Attribute::to_repr(Self) -> @debug.Repr
+
+pub(all) enum Endian {
+  Little
+  Big
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Endian::equal(Self, Self) -> Bool
+pub fn Endian::not_equal(Self, Self) -> Bool
+pub fn Endian::to_json(Self) -> Json
+pub fn Endian::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Header {
+  kind : Int
+  flags : Int
+  sequence : UInt
+  port : UInt
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Header::equal(Self, Self) -> Bool
+pub fn Header::not_equal(Self, Self) -> Bool
+pub fn Header::to_json(Self) -> Json
+pub fn Header::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Message {
+  header : Header
+  payload : Bytes
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Message::equal(Self, Self) -> Bool
+pub fn Message::not_equal(Self, Self) -> Bool
+pub fn Message::to_json(Self) -> Json
+pub fn Message::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits
