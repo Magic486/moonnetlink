@@ -3,11 +3,11 @@
 type Handle
 
 ///|
-extern "C" fn open_raw(groups : UInt) -> Handle = "mn_open"
+extern "C" fn open_raw(groups : UInt32) -> Handle = "mn_open"
 
 ///|
 #borrow(handle)
-extern "C" fn status_raw(handle : Handle) -> Int = "mn_status"
+extern "C" fn status_raw(handle : Handle) -> Int32 = "mn_status"
 
 ///|
 #borrow(handle)
@@ -15,11 +15,11 @@ extern "C" fn close_raw(handle : Handle) -> Unit = "mn_close"
 
 ///|
 #borrow(handle, data)
-extern "C" fn send_raw(handle : Handle, data : Bytes) -> Int = "mn_send"
+extern "C" fn send_raw(handle : Handle, data : Bytes) -> Int32 = "mn_send"
 
 ///|
 #borrow(handle)
-extern "C" fn receive_raw(handle : Handle, timeout_ms : Int) -> Bytes = "mn_receive"
+extern "C" fn receive_raw(handle : Handle, timeout_ms : Int32) -> Bytes = "mn_receive"
 
 ///|
 extern "C" fn little_raw() -> Bool = "mn_little"
@@ -33,13 +33,13 @@ pub extern "C" fn is_linux() -> Bool = "mn_is_linux"
 
 ///|
 pub(all) suberror NativeError {
-  NativeError(String, Int)
+  NativeError(String, Int32)
 } derive(Debug)
 
 ///|
 pub struct Socket {
   handle : Handle
-  mut sequence : UInt
+  mut sequence : UInt32
   endian : @wire.Endian
 }
 
@@ -55,7 +55,7 @@ pub fn host_endian() -> @wire.Endian {
 ///|
 /// NETLINK_ROUTE socket, kernel-assigned port, automatic finalizer plus explicit close.
 /// groups=0 for dumps; groups=0x555 for link, address, route and neighbor notifications.
-pub fn Socket::open(groups? : UInt = 0U) -> Socket raise NativeError {
+pub fn Socket::open(groups~ : UInt32 = 0U) -> Socket raise NativeError {
   let handle = open_raw(groups)
   let status = status_raw(handle)
   guard status >= 0 else { raise NativeError("open NETLINK_ROUTE", -status) }
@@ -88,7 +88,10 @@ fn unwrap_frame(frame : Bytes) -> Bytes raise {
 
 ///|
 /// None is a bounded poll timeout; transport loss is an error, never an empty snapshot.
-pub fn Socket::receive(self : Socket, timeout_ms? : Int = 2000) -> Bytes? raise {
+pub fn Socket::receive(
+  self : Socket,
+  timeout_ms~ : Int32 = 2000,
+) -> Bytes? raise {
   guard timeout_ms >= 0 && timeout_ms <= 60000 else {
     raise NativeError("timeout out of range", 22)
   }
@@ -112,7 +115,7 @@ pub(all) struct Capture {
 pub fn Socket::dump(
   self : Socket,
   kind : @route.ObjectKind,
-  timeout_ms? : Int = 5000,
+  timeout_ms~ : Int32 = 5000,
 ) -> Capture raise {
   guard timeout_ms > 0 && timeout_ms <= 60000 else {
     raise NativeError("dump timeout out of range", 22)

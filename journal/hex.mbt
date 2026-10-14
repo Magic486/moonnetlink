@@ -12,11 +12,11 @@ pub fn hex(data : Bytes) -> String {
 }
 
 ///|
-fn nibble(c : Char) -> Int raise @wire.ProtocolError {
+fn nibble(c : Char) -> Int32 raise @wire.ProtocolError {
   match c {
-    '0'..='9' => c.to_int() - 48
-    'a'..='f' => c.to_int() - 87
-    'A'..='F' => c.to_int() - 55
+    '0'..<='9' => c.to_int() - 48
+    'a'..<='f' => c.to_int() - 87
+    'A'..<='F' => c.to_int() - 55
     _ => raise @wire.ProtocolError("invalid hex digit")
   }
 }

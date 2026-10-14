@@ -1,11 +1,11 @@
 ///|
 /// Self-authored deterministic fixtures, never confused with live kernel captures.
 pub fn link(
-  index? : Int = 7,
-  name? : String = "demo0",
-  mtu? : UInt = 1500U,
-  deleted? : Bool = false,
-  endian? : @wire.Endian = @wire.Little,
+  index~ : Int32 = 7,
+  name~ : String = "demo0",
+  mtu~ : UInt32 = 1500U,
+  deleted~ : Bool = false,
+  endian~ : @wire.Endian = @wire.Little,
 ) -> @wire.Message raise @wire.ProtocolError {
   let data : FixedArray[Byte] = FixedArray::make(16, 0)
   @wire.write_u16(data, 2, 1, endian~)
@@ -37,7 +37,7 @@ pub fn link(
 
 ///|
 pub fn address(
-  deleted? : Bool = false,
+  deleted~ : Bool = false,
 ) -> @wire.Message raise @wire.ProtocolError {
   let data : FixedArray[Byte] = FixedArray::make(8, 0)
   data[0] = 2
@@ -65,7 +65,7 @@ pub fn address(
 
 ///|
 pub fn route(
-  deleted? : Bool = false,
+  deleted~ : Bool = false,
 ) -> @wire.Message raise @wire.ProtocolError {
   let data : FixedArray[Byte] = FixedArray::make(12, 0)
   data[0] = 2
@@ -96,9 +96,9 @@ pub fn route(
 
 ///|
 pub fn neighbor(
-  state? : Int = 2,
-  mac? : Bytes = b"\x02\x00\x00\x00\x00\x08",
-  deleted? : Bool = false,
+  state~ : Int32 = 2,
+  mac~ : Bytes = b"\x02\x00\x00\x00\x00\x08",
+  deleted~ : Bool = false,
 ) -> @wire.Message raise @wire.ProtocolError {
   let data : FixedArray[Byte] = FixedArray::make(12, 0)
   data[0] = 2
@@ -125,10 +125,10 @@ pub fn neighbor(
 
 ///|
 pub fn control(
-  kind : Int,
-  sequence? : UInt = 0U,
-  flags? : Int = 0,
-  code? : Int = 0,
+  kind : Int32,
+  sequence~ : UInt32 = 0U,
+  flags~ : Int32 = 0,
+  code~ : Int32 = 0,
 ) -> @wire.Message {
   let payload = if kind == 2 {
     @wire.uint_payload(code.reinterpret_as_uint()) +

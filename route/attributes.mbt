@@ -1,7 +1,7 @@
 ///|
 fn attrs_at(
   data : Bytes,
-  offset : Int,
+  offset : Int32,
   endian : @wire.Endian,
 ) -> Array[@wire.Attribute] raise @wire.ProtocolError {
   @wire.decode_attributes(
@@ -13,9 +13,9 @@ fn attrs_at(
 ///|
 fn attr_uint(
   attrs : Array[@wire.Attribute],
-  kind : Int,
+  kind : Int32,
   endian : @wire.Endian,
-) -> UInt? raise @wire.ProtocolError {
+) -> UInt32? raise @wire.ProtocolError {
   match @wire.find_attribute(attrs, kind) {
     None => None
     Some(a) => {
@@ -31,8 +31,8 @@ fn attr_uint(
 ///|
 fn attr_byte(
   attrs : Array[@wire.Attribute],
-  kind : Int,
-) -> Int? raise @wire.ProtocolError {
+  kind : Int32,
+) -> Int32? raise @wire.ProtocolError {
   match @wire.find_attribute(attrs, kind) {
     None => None
     Some(a) => {
@@ -47,7 +47,7 @@ fn attr_byte(
 ///|
 fn attr_string(
   attrs : Array[@wire.Attribute],
-  kind : Int,
+  kind : Int32,
 ) -> String? raise @wire.ProtocolError {
   match @wire.find_attribute(attrs, kind) {
     None => None
@@ -76,7 +76,7 @@ pub fn hardware_address(data : Bytes) -> String {
 /// Formats IPv6 without compression; integer byte order does not affect IP bytes.
 pub fn ip_address(
   data : Bytes,
-  family : Int,
+  family : Int32,
 ) -> String raise @wire.ProtocolError {
   match family {
     2 => {
@@ -102,8 +102,8 @@ pub fn ip_address(
 ///|
 fn attr_ip(
   attrs : Array[@wire.Attribute],
-  kind : Int,
-  family : Int,
+  kind : Int32,
+  family : Int32,
 ) -> String? raise @wire.ProtocolError {
   match @wire.find_attribute(attrs, kind) {
     None => None
@@ -112,7 +112,7 @@ fn attr_ip(
 }
 
 ///|
-fn attr_hardware(attrs : Array[@wire.Attribute], kind : Int) -> String? {
+fn attr_hardware(attrs : Array[@wire.Attribute], kind : Int32) -> String? {
   match @wire.find_attribute(attrs, kind) {
     None => None
     Some(a) => Some(hardware_address(a.payload))
@@ -121,8 +121,8 @@ fn attr_hardware(attrs : Array[@wire.Attribute], kind : Int) -> String? {
 
 ///|
 fn validate_prefix(
-  family : Int,
-  length : Int,
+  family : Int32,
+  length : Int32,
 ) -> Unit raise @wire.ProtocolError {
   guard (family != 2 || length <= 32) && (family != 10 || length <= 128) else {
     raise @wire.ProtocolError("IP prefix out of range")

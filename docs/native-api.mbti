@@ -1,9 +1,9 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "matrix486/moonnetlink/native"
+package "Magic486/moonnetlink/native"
 
 import {
-  "matrix486/moonnetlink/route",
-  "matrix486/moonnetlink/wire",
+  "Magic486/moonnetlink/route",
+  "Magic486/moonnetlink/wire",
   "moonbitlang/core/debug",
 }
 

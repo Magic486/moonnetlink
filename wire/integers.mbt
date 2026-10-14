@@ -1,5 +1,5 @@
 ///|
-pub fn align4(value : Int) -> Int raise ProtocolError {
+pub fn align4(value : Int32) -> Int32 raise ProtocolError {
   guard value >= 0 && value <= 2147483644 else {
     raise ProtocolError("alignment length out of range")
   }
@@ -7,7 +7,11 @@ pub fn align4(value : Int) -> Int raise ProtocolError {
 }
 
 ///|
-fn bounds(data : Bytes, offset : Int, count : Int) -> Unit raise ProtocolError {
+fn bounds(
+  data : Bytes,
+  offset : Int32,
+  count : Int32,
+) -> Unit raise ProtocolError {
   guard offset >= 0 &&
     count >= 0 &&
     offset <= data.length() &&
@@ -19,9 +23,9 @@ fn bounds(data : Bytes, offset : Int, count : Int) -> Unit raise ProtocolError {
 ///|
 pub fn u16(
   data : Bytes,
-  offset : Int,
-  endian? : Endian = Little,
-) -> Int raise ProtocolError {
+  offset : Int32,
+  endian~ : Endian = Little,
+) -> Int32 raise ProtocolError {
   bounds(data, offset, 2)
   let a = data[offset].to_int()
   let b = data[offset + 1].to_int()
@@ -34,9 +38,9 @@ pub fn u16(
 ///|
 pub fn u32(
   data : Bytes,
-  offset : Int,
-  endian? : Endian = Little,
-) -> UInt raise ProtocolError {
+  offset : Int32,
+  endian~ : Endian = Little,
+) -> UInt32 raise ProtocolError {
   bounds(data, offset, 4)
   let a = data[offset].to_uint()
   let b = data[offset + 1].to_uint()
@@ -51,18 +55,18 @@ pub fn u32(
 ///|
 pub fn i32(
   data : Bytes,
-  offset : Int,
-  endian? : Endian = Little,
-) -> Int raise ProtocolError {
+  offset : Int32,
+  endian~ : Endian = Little,
+) -> Int32 raise ProtocolError {
   u32(data, offset, endian~).reinterpret_as_int()
 }
 
 ///|
 pub fn write_u16(
   data : FixedArray[Byte],
-  offset : Int,
-  value : Int,
-  endian? : Endian = Little,
+  offset : Int32,
+  value : Int32,
+  endian~ : Endian = Little,
 ) -> Unit raise ProtocolError {
   guard offset >= 0 && offset <= data.length() && 2 <= data.length() - offset else {
     raise ProtocolError("write out of bounds")
@@ -85,9 +89,9 @@ pub fn write_u16(
 ///|
 pub fn write_u32(
   data : FixedArray[Byte],
-  offset : Int,
-  value : UInt,
-  endian? : Endian = Little,
+  offset : Int32,
+  value : UInt32,
+  endian~ : Endian = Little,
 ) -> Unit raise ProtocolError {
   guard offset >= 0 && offset <= data.length() && 4 <= data.length() - offset else {
     raise ProtocolError("write out of bounds")
@@ -102,7 +106,7 @@ pub fn write_u32(
 }
 
 ///|
-pub fn uint_payload(value : UInt, endian? : Endian = Little) -> Bytes {
+pub fn uint_payload(value : UInt32, endian~ : Endian = Little) -> Bytes {
   let bytes : FixedArray[Byte] = FixedArray::make(4, 0)
   try! write_u32(bytes, 0, value, endian~)
   Bytes::from_array(bytes)
@@ -112,8 +116,8 @@ pub fn uint_payload(value : UInt, endian? : Endian = Little) -> Bytes {
 /// Copy a bounded byte range; never retain a mutable view of caller input.
 pub fn copy_range(
   data : Bytes,
-  start : Int,
-  count : Int,
+  start : Int32,
+  count : Int32,
 ) -> Bytes raise ProtocolError {
   bounds(data, start, count)
   Bytes::makei(count, i => data[start + i])

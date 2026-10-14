@@ -21,10 +21,10 @@ pub(all) suberror ProtocolError {
 
 ///|
 pub(all) struct Header {
-  kind : Int
-  flags : Int
-  sequence : UInt
-  port : UInt
+  kind : Int32
+  flags : Int32
+  sequence : UInt32
+  port : UInt32
 } derive(Debug, Eq, ToJson)
 
 ///|
@@ -36,12 +36,12 @@ pub(all) struct Message {
 ///|
 /// raw_kind retains NLA_F_NESTED/NLA_F_NET_BYTEORDER and unknown attribute IDs.
 pub(all) struct Attribute {
-  raw_kind : Int
+  raw_kind : Int32
   payload : Bytes
 } derive(Debug, Eq, ToJson)
 
 ///|
-pub fn Attribute::kind(self : Attribute) -> Int {
+pub fn Attribute::kind(self : Attribute) -> Int32 {
   self.raw_kind & 0x3fff
 }
 
@@ -58,7 +58,7 @@ pub fn Attribute::network_order(self : Attribute) -> Bool {
 ///|
 pub fn Attribute::children(
   self : Attribute,
-  endian? : Endian = Little,
+  endian~ : Endian = Little,
 ) -> Array[Attribute] raise ProtocolError {
   guard self.nested() else {
     raise ProtocolError("attribute is not marked nested")

@@ -2,7 +2,7 @@
 /// Decode one complete datagram. Netlink is not a byte stream.
 pub fn decode(
   data : Bytes,
-  endian? : Endian = Little,
+  endian~ : Endian = Little,
 ) -> Array[Message] raise ProtocolError {
   let result : Array[Message] = []
   let mut offset = 0
@@ -38,7 +38,7 @@ pub fn decode(
 ///|
 pub fn encode(
   message : Message,
-  endian? : Endian = Little,
+  endian~ : Endian = Little,
 ) -> Bytes raise ProtocolError {
   guard message.payload.length() <= 16777216 else {
     raise ProtocolError("message exceeds 16 MiB encoding limit")
@@ -59,7 +59,7 @@ pub fn encode(
 ///|
 pub fn decode_attributes(
   data : Bytes,
-  endian? : Endian = Little,
+  endian~ : Endian = Little,
 ) -> Array[Attribute] raise ProtocolError {
   let result : Array[Attribute] = []
   let mut offset = 0
@@ -88,7 +88,7 @@ pub fn decode_attributes(
 ///|
 pub fn encode_attributes(
   attributes : Array[Attribute],
-  endian? : Endian = Little,
+  endian~ : Endian = Little,
 ) -> Bytes raise ProtocolError {
   let mut result = b""
   for attribute in attributes {
@@ -108,7 +108,10 @@ pub fn encode_attributes(
 }
 
 ///|
-pub fn find_attribute(attributes : Array[Attribute], kind : Int) -> Attribute? {
+pub fn find_attribute(
+  attributes : Array[Attribute],
+  kind : Int32,
+) -> Attribute? {
   for a in attributes {
     if a.kind() == kind {
       return Some(a)

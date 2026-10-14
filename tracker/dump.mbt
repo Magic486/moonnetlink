@@ -8,14 +8,14 @@ pub(all) enum DumpStatus {
 ///|
 /// One request transaction. Unrelated messages cannot complete this dump.
 pub struct Dump {
-  sequence : UInt
+  sequence : UInt32
   kind : @route.ObjectKind
   mut status : DumpStatus
   events : Array[@route.Event]
 } derive(Debug)
 
 ///|
-pub fn Dump::new(sequence : UInt, kind : @route.ObjectKind) -> Dump {
+pub fn Dump::new(sequence : UInt32, kind : @route.ObjectKind) -> Dump {
   { sequence, kind, status: Pending, events: [], }
 }
 
@@ -40,7 +40,7 @@ fn belongs(event : @route.Event, kind : @route.ObjectKind) -> Bool {
 pub fn Dump::accept(
   self : Dump,
   message : @wire.Message,
-  endian? : @wire.Endian = @wire.Little,
+  endian~ : @wire.Endian = @wire.Little,
 ) -> Bool raise @wire.ProtocolError {
   if message.header.sequence != self.sequence {
     return false

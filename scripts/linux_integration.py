@@ -104,7 +104,6 @@ def namespace_events():
     records=[json.loads(line) for line in output.splitlines()]
     events=[r['event'] for r in records if r['kind']=='event']
     tags={e[0] for e in events}
-    # MoonBit enum ToJson uses an object representation on some toolchains; adapt below.
     summary=records[-1]['state']
     replay=json.loads(run(BINARY,'replay',record).stdout)['state']
     assert summary==replay,'record/replay drift'
@@ -120,7 +119,7 @@ def main():
     parser=argparse.ArgumentParser(); parser.add_argument('--namespace-worker',action='store_true'); args=parser.parse_args()
     if args.namespace_worker:namespace_events();return
     report={'platform':os.uname().sysname,'kernel':os.uname().release,'toolchain':run(str(pathlib.Path.home()/'.moon/bin/moon'),'version','--all').stdout,'snapshot':snapshot_test(),'cli':cli_test()}
-    # No password storage: the user-authorized Linux host has noninteractive sudo.
+    # Only this temporary namespace worker can alter network configuration.
     probe=run('sudo','-n','unshare','-n','true',check=False)
     if probe.returncode==0:
         p=run('sudo','-n','unshare','-n','env','MOONNETLINK_ISOLATED=1',sys.executable,__file__,'--namespace-worker')

@@ -93,7 +93,7 @@ fn decode_neighbor(
 /// Decode typed events, preserving all original attributes and unknown messages.
 pub fn decode(
   message : @wire.Message,
-  endian? : @wire.Endian = @wire.Little,
+  endian~ : @wire.Endian = @wire.Little,
 ) -> Event raise @wire.ProtocolError {
   let data = message.payload
   match message.header.kind {

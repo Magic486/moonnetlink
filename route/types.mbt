@@ -8,24 +8,24 @@ pub(all) enum ObjectKind {
 
 ///|
 pub(all) struct Link {
-  index : Int
-  family : Int
-  hardware_type : Int
-  flags : UInt
+  index : Int32
+  family : Int32
+  hardware_type : Int32
+  flags : UInt32
   name : String?
-  mtu : UInt?
-  operstate : Int?
+  mtu : UInt32?
+  operstate : Int32?
   address : String?
   attributes : Array[@wire.Attribute]
 } derive(Debug, Eq, ToJson)
 
 ///|
 pub(all) struct Address {
-  index : UInt
-  family : Int
-  prefix_length : Int
-  flags : UInt
-  scope : Int
+  index : UInt32
+  family : Int32
+  prefix_length : Int32
+  flags : UInt32
+  scope : Int32
   local_address : String?
   address : String?
   label : String?
@@ -34,31 +34,31 @@ pub(all) struct Address {
 
 ///|
 pub(all) struct Route {
-  family : Int
-  destination_prefix : Int
-  source_prefix : Int
-  tos : Int
-  table : UInt
-  protocol : Int
-  scope : Int
-  route_type : Int
-  flags : UInt
+  family : Int32
+  destination_prefix : Int32
+  source_prefix : Int32
+  tos : Int32
+  table : UInt32
+  protocol : Int32
+  scope : Int32
+  route_type : Int32
+  flags : UInt32
   destination : String?
   source : String?
   gateway : String?
-  output_interface : UInt?
-  priority : UInt?
+  output_interface : UInt32?
+  priority : UInt32?
   preferred_source : String?
   attributes : Array[@wire.Attribute]
 } derive(Debug, Eq, ToJson)
 
 ///|
 pub(all) struct Neighbor {
-  family : Int
-  index : Int
-  state : Int
-  flags : Int
-  neighbor_type : Int
+  family : Int32
+  index : Int32
+  state : Int32
+  flags : Int32
+  neighbor_type : Int32
   destination : String?
   lladdr : String?
   attributes : Array[@wire.Attribute]
@@ -67,9 +67,9 @@ pub(all) struct Neighbor {
 ///|
 /// Kernel errno is signed and negative on failure; zero is a successful ACK.
 pub(all) struct Ack {
-  code : Int
+  code : Int32
   message : String?
-  bad_offset : UInt?
+  bad_offset : UInt32?
   attributes : Array[@wire.Attribute]
 } derive(Debug, Eq, ToJson)
 

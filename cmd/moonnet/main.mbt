@@ -27,10 +27,10 @@ fn snapshot(record_path : String?) -> Unit raise {
     "kind": "snapshot",
     "complete_by_kind": true,
     "atomic_across_kinds": false,
-    "links": view.links.to_json(),
-    "addresses": view.addresses.to_json(),
-    "routes": view.routes.to_json(),
-    "neighbors": view.neighbors.to_json(),
+    "links": Json(view.links),
+    "addresses": Json(view.addresses),
+    "routes": Json(view.routes),
+    "neighbors": Json(view.neighbors),
   })
 }
 
@@ -47,7 +47,7 @@ fn replay(records : Array[@journal.Record], source : String) -> Unit raise {
 }
 
 ///|
-fn seconds(value : String) -> Int raise @wire.ProtocolError {
+fn seconds(value : String) -> Int32 raise @wire.ProtocolError {
   guard value.length() > 0 && value.length() <= 3 else {
     raise @wire.ProtocolError("seconds must be 1..60")
   }
@@ -65,7 +65,7 @@ fn seconds(value : String) -> Int raise @wire.ProtocolError {
 }
 
 ///|
-fn watch(duration : Int, path : String) -> Unit raise {
+fn watch(duration : Int32, path : String) -> Unit raise {
   let socket = @native.Socket::open(groups=0x555U)
   defer socket.close()
   @native.write_text(path, "")

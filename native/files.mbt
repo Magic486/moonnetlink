@@ -4,10 +4,10 @@ extern "C" fn read_raw(path : Bytes) -> Bytes = "mn_read_file"
 
 ///|
 #borrow(path, data)
-extern "C" fn write_raw(path : Bytes, data : Bytes, append : Bool) -> Int = "mn_write_file"
+extern "C" fn write_raw(path : Bytes, data : Bytes, append : Bool) -> Int32 = "mn_write_file"
 
 ///|
-pub extern "C" fn exit(code : Int) -> Unit = "mn_exit"
+pub extern "C" fn exit(code : Int32) -> Unit = "mn_exit"
 
 ///|
 fn path_bytes(path : String) -> Bytes raise NativeError {
@@ -26,7 +26,7 @@ pub fn read_text(path : String) -> String raise {
 pub fn write_text(
   path : String,
   data : String,
-  append? : Bool = false,
+  append~ : Bool = false,
 ) -> Unit raise {
   let status = write_raw(path_bytes(path), @utf8.encode(data), append)
   guard status == 0 else { raise NativeError("write file", -status) }

@@ -8,18 +8,18 @@ pub(all) struct View {
   stale : Bool
   starts_partial : Bool
   reasons : Array[String]
-  applied_events : Int
+  applied_events : Int32
 } derive(Debug, Eq, ToJson)
 
 ///|
 pub struct State {
-  links : Map[Int, @route.Link]
+  links : Map[Int32, @route.Link]
   addresses : Map[String, @route.Address]
   routes : Map[String, @route.Route]
   neighbors : Map[String, @route.Neighbor]
   mut stale : Bool
   reasons : Array[String]
-  mut applied_events : Int
+  mut applied_events : Int32
 } derive(Debug)
 
 ///|
@@ -125,7 +125,7 @@ pub fn State::apply(self : State, event : @route.Event) -> Unit {
 pub fn State::ingest(
   self : State,
   data : Bytes,
-  endian? : @wire.Endian = @wire.Little,
+  endian~ : @wire.Endian = @wire.Little,
 ) -> Unit raise @wire.ProtocolError {
   let messages = @wire.decode(data, endian~)
   let events = messages.map(m => @route.decode(m, endian~))

@@ -6,7 +6,7 @@ MoonBit 原生 Netlink 协议与 Linux 网络状态观察库。查询网卡、�
 
 ## 快速运行
 
-需要 MoonBit 2026-09 工具链或更新的兼容版本；Linux 原生构建需要 C 编译器和 Linux UAPI 头文件。没有第三方 Mooncakes 依赖。JavaScript 运行需要 Node.js。
+需要 MoonBit 2026-10-12 工具链或更新的兼容版本；Linux 原生构建需要 C 编译器和 Linux UAPI 头文件。没有第三方 Mooncakes 依赖。JavaScript 运行需要 Node.js。
 
 在项目根目录运行，Windows 也能跑以下两种离线示例：
 

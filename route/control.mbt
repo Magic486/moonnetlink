@@ -1,6 +1,6 @@
 ///|
 fn ack_with_attrs(
-  code : Int,
+  code : Int32,
   attrs : Array[@wire.Attribute],
   endian : @wire.Endian,
 ) -> Ack raise @wire.ProtocolError {
@@ -63,7 +63,7 @@ fn decode_done(
 
 ///|
 /// Read-only dump request. Never emits network mutation operations.
-pub fn request(kind : ObjectKind, sequence : UInt) -> @wire.Message {
+pub fn request(kind : ObjectKind, sequence : UInt32) -> @wire.Message {
   let (message_type, size) = match kind {
     Links => (18, 16)
     Addresses => (22, 8)
