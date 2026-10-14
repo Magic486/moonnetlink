@@ -1,0 +1,31 @@
+{
+  "module": "Magic486/moonnetlink",
+  "categories": {
+    "implementation": {
+      "files": 22,
+      "physical_lines": 2342,
+      "nonblank_noncomment_lines": 1870
+    },
+    "tests": {
+      "files": 17,
+      "physical_lines": 1522,
+      "nonblank_noncomment_lines": 1337
+    },
+    "examples": {
+      "files": 3,
+      "physical_lines": 68,
+      "nonblank_noncomment_lines": 64
+    },
+    "generated_fixtures": {
+      "files": 2,
+      "physical_lines": 46,
+      "nonblank_noncomment_lines": 42
+    },
+    "synthetic_helpers": {
+      "files": 1,
+      "physical_lines": 156,
+      "nonblank_noncomment_lines": 144
+    }
+  },
+  "note": "Generated fixture embeddings excluded from implementation. Counts describe source size, not an official acceptance verdict."
+}

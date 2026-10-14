@@ -14,6 +14,7 @@ scripts/prepare-publication.py
 scripts/explicit-traits.py
 docs/completion-audit.md
 acceptance-local.md
+/output/
 # Hosting automation belongs in the source repository, not the library archive.
 .github/
 .git/
