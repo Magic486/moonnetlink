@@ -2,6 +2,8 @@
 
 MoonBit 原生 Netlink 协议与 Linux 网络状态观察库。查询网卡、地址、路由和邻居，记录内核变更报文，并用相同 MoonBit 核心在 Linux、JavaScript、WASM-GC 上重放。
 
+[![CI](https://github.com/Magic486/moonnetlink/actions/workflows/ci.yml/badge.svg)](https://github.com/Magic486/moonnetlink/actions/workflows/ci.yml)
+
 这是经过生态调研后选定的 Linux 基础能力项目。业务查询直接使用 `NETLINK_ROUTE`，不是解析 `ip` 命令输出；`iproute2` 只用于独立测试。当前版本为 0.1.0，源码仓库为 [Magic486/moonnetlink](https://github.com/Magic486/moonnetlink)，发布进度与验收证据见 [交付说明](docs/release.md)。
 
 ## 快速运行
@@ -59,7 +61,13 @@ fn main raise {
 }
 ```
 
-模块名为 `Magic486/moonnetlink`。从源码运行不需要先发布或安装包；独立项目的注册表安装说明将在发布确认后写入交付说明。
+独立项目可从 Mooncakes 安装模块，然后导入需要的子包：
+
+```sh
+moon add Magic486/moonnetlink
+```
+
+当前 API 版本为 0.1.0，模块包含 `wire`、`route`、`tracker`、`journal` 和 Linux 原生 `native`。从源码运行示例不需要另装本模块。
 
 ## 一致性边界
 

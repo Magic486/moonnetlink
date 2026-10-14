@@ -2,7 +2,7 @@
 
 验证日期：2026-10-14。以下为 Windows 开发环境与 SSH Linux 测试环境的实测结果。公开发布后的 CI 与安装验证另见 [交付说明](release.md)。
 
-## 已执行检查
+## 本地 MVP 基线检查
 
 | 检查 | 结果 |
 |---|---|
@@ -39,5 +39,7 @@ CLI 未知命令、非法 watch 时长、缺失日志、错误日志版本均以
 ## 重现与证据
 
 按 README 执行各后端测试、`scripts/verify-portable.py` 和 Linux `scripts/linux_integration.py`。测试生成 `demo-output`；随项目保留的报告为本轮结果。跨平台证据：[便携比较](test-evidence/portable-report.json)、[WASM-GC 真实重放](test-evidence/kernel_replay-wasm-gc.jsonl)、[Linux native 真实重放](test-evidence/kernel-replay-native.jsonl)。
+
+首次发布前已迁移到 2026-10-12 的整数类型名、默认参数语法与 Json 转换。迁移后 Linux 再次通过 WASM-GC/JS 各 54 项、native 59 项；公开 CI 结果见 release.md。上面的 September 工具链记录属于迁移前基线，不是当前最低版本承诺。
 
 协议全解析并不代表所有内核语义已实现。缓存始终部分覆盖，跨对象快照不原子，复杂路由替换/通配删除需重新 dump；现场事件接收也不能证明未来绝无丢包。当前结果足以证明已列出的 MVP 契约，不是正式赛事审核或获奖判断。
