@@ -3,7 +3,7 @@
 type Handle
 
 ///|
-extern "C" fn open_raw(groups : UInt32) -> Handle = "mn_open"
+extern "C" fn open_raw(protocol : Int32, groups : UInt32) -> Handle = "mn_open"
 
 ///|
 #borrow(handle)
@@ -37,10 +37,17 @@ pub(all) suberror NativeError {
 } derive(Debug)
 
 ///|
+pub(all) enum Protocol {
+  Route
+  Generic
+} derive(Debug, Eq)
+
+///|
 pub struct Socket {
   handle : Handle
   mut sequence : UInt32
   endian : @wire.Endian
+  protocol : Protocol
 }
 
 ///|
@@ -55,11 +62,14 @@ pub fn host_endian() -> @wire.Endian {
 ///|
 /// NETLINK_ROUTE socket, kernel-assigned port, automatic finalizer plus explicit close.
 /// groups=0 for dumps; groups=0x555 for link, address, route and neighbor notifications.
-pub fn Socket::open(groups~ : UInt32 = 0U) -> Socket raise NativeError {
-  let handle = open_raw(groups)
+pub fn Socket::open(
+  groups~ : UInt32 = 0U,
+  protocol~ : Protocol = Route,
+) -> Socket raise NativeError {
+  let handle = open_raw(if protocol == Route { 0 } else { 16 }, groups)
   let status = status_raw(handle)
-  guard status >= 0 else { raise NativeError("open NETLINK_ROUTE", -status) }
-  { handle, sequence: 0U, endian: host_endian(), }
+  guard status >= 0 else { raise NativeError("open Netlink socket", -status) }
+  { handle, sequence: 0U, endian: host_endian(), protocol, }
 }
 
 ///|
@@ -72,7 +82,7 @@ pub fn Socket::send(self : Socket, message : @wire.Message) -> Unit raise {
   let bytes = @wire.encode(message, endian=self.endian)
   let n = send_raw(self.handle, bytes)
   guard n == bytes.length() else {
-    raise NativeError("send NETLINK_ROUTE", if n < 0 { -n } else { 5 })
+    raise NativeError("send Netlink", if n < 0 { -n } else { 5 })
   }
 }
 
@@ -117,6 +127,9 @@ pub fn Socket::dump(
   kind : @route.ObjectKind,
   timeout_ms~ : Int32 = 5000,
 ) -> Capture raise {
+  guard self.protocol == Route else {
+    raise NativeError("rtnetlink dump requires Route protocol", 22)
+  }
   guard timeout_ms > 0 && timeout_ms <= 60000 else {
     raise NativeError("dump timeout out of range", 22)
   }
@@ -159,3 +172,9 @@ pub extend Capture with Debug::{to_repr}
 
 ///|
 pub extend Capture with ToJson::{to_json}
+
+///|
+pub extend Protocol with Debug::{to_repr}
+
+///|
+pub extend Protocol with Eq::{equal, not_equal}

@@ -23,11 +23,11 @@ static void finalize(void *ptr) {
   h->fd = -1;
 }
 
-MOONBIT_FFI_EXPORT void *mn_open(uint32_t groups) {
+MOONBIT_FFI_EXPORT void *mn_open(int32_t protocol, uint32_t groups) {
   mn_handle *h = moonbit_make_external_object(finalize, sizeof(mn_handle));
   h->fd = -1; h->error = 95;
 #ifdef __linux__
-  h->fd = socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC | SOCK_NONBLOCK, NETLINK_ROUTE);
+  h->fd = socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC | SOCK_NONBLOCK, protocol);
   if (h->fd < 0) { h->error = errno; return h; }
   struct sockaddr_nl addr = {0};
   addr.nl_family = AF_NETLINK; addr.nl_groups = groups;
@@ -41,7 +41,7 @@ MOONBIT_FFI_EXPORT void *mn_open(uint32_t groups) {
   setsockopt(h->fd, SOL_SOCKET, SO_RCVBUF, &buffer, sizeof(buffer));
   h->error = 0;
 #else
-  (void)groups;
+  (void)protocol; (void)groups;
 #endif
   return h;
 }

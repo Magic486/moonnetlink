@@ -41,14 +41,23 @@ pub fn Capture::to_repr(Self) -> @debug.Repr
 
 type Handle
 
+pub(all) enum Protocol {
+  Route
+  Generic
+} derive(Eq, @debug.Debug)
+pub fn Protocol::equal(Self, Self) -> Bool
+pub fn Protocol::not_equal(Self, Self) -> Bool
+pub fn Protocol::to_repr(Self) -> @debug.Repr
+
 pub struct Socket {
   handle : Handle
   mut sequence : UInt
   endian : @wire.Endian
+  protocol : Protocol
 }
 pub fn Socket::close(Self) -> Unit
 pub fn Socket::dump(Self, @route.ObjectKind, timeout_ms? : Int) -> Capture raise
-pub fn Socket::open(groups? : UInt) -> Self raise NativeError
+pub fn Socket::open(groups? : UInt, protocol? : Protocol) -> Self raise NativeError
 pub fn Socket::receive(Self, timeout_ms? : Int) -> Bytes? raise
 pub fn Socket::send(Self, @wire.Message) -> Unit raise
 
