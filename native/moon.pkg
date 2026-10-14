@@ -4,6 +4,7 @@ import {
   "Magic486/moonnetlink/wire",
   "Magic486/moonnetlink/route",
   "Magic486/moonnetlink/tracker",
+  "Magic486/moonnetlink/genl",
   "moonbitlang/core/encoding/utf8",
 }
 

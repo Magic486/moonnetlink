@@ -13,7 +13,7 @@ fn snapshot(record_path : String?) -> Unit raise {
   for kind in [@route.Links, @route.Addresses, @route.Routes, @route.Neighbors] {
     let capture = socket.dump(kind)
     for event in capture.events {
-      state.apply(event)
+      state.apply(event, endian=capture.endian)
     }
     for data in capture.datagrams {
       lines.push(@journal.line(@journal.Datagram(data, capture.endian)))
@@ -44,6 +44,63 @@ fn replay(records : Array[@journal.Record], source : String) -> Unit raise {
     }
   }
   emit({ "kind": "replay", "source": source, "state": state.view().to_json() })
+}
+
+///|
+fn family(name : String, record_path : String?) -> Unit raise {
+  let socket = @native.Socket::open(protocol=@native.Generic)
+  defer socket.close()
+  let capture = socket.family(name)
+  if record_path is Some(path) {
+    let lines = capture.datagrams.map(data => {
+      @journal.line(@journal.Datagram(data, capture.endian))
+    })
+    @native.write_text(path, lines.join("\n") + "\n")
+  }
+  emit({
+    "kind": "family",
+    "source": "live-kernel",
+    "family": capture.family.to_json(),
+  })
+}
+
+///|
+fn family_replay(records : Array[@journal.Record]) -> Unit raise {
+  let mut lookup : @genl.Lookup? = None
+  for record in records {
+    match record {
+      @journal.Loss(reason) =>
+        raise @wire.ProtocolError("family capture lost data: " + reason)
+      @journal.Datagram(data, endian) =>
+        for message in @wire.decode(data, endian~) {
+          if lookup is None && message.header.kind == 16 {
+            lookup = Some(
+              @genl.Lookup::new(
+                message.header.sequence,
+                @genl.decode_family(message, endian~).name,
+              ),
+            )
+          }
+        }
+    }
+  }
+  guard lookup is Some(transaction) else {
+    raise @wire.ProtocolError("no family metadata in capture")
+  }
+  for record in records {
+    if record is @journal.Datagram(data, endian) {
+      for message in @wire.decode(data, endian~) {
+        if transaction.status() == @genl.Pending {
+          ignore(transaction.accept(message, endian~))
+        }
+      }
+    }
+  }
+  emit({
+    "kind": "family",
+    "source": "recorded-kernel",
+    "family": transaction.result().to_json(),
+  })
 }
 
 ///|
@@ -132,13 +189,17 @@ fn run(args : Array[String]) -> Unit raise {
   match args {
     [] | ["help"] | ["--help"] =>
       println(
-        "MoonNetlink\n  snapshot [--record FILE]\n  watch SECONDS FILE (1..60 seconds, partial event cache)\n  replay FILE\n  demo (synthetic loss scenario)",
+        "MoonNetlink\n  snapshot [--record FILE]\n  watch SECONDS FILE (1..60 seconds, partial event cache)\n  replay FILE\n  family NAME [--record FILE] (Generic Netlink discovery)\n  family-replay FILE\n  demo (synthetic loss scenario)",
       )
     ["snapshot"] => snapshot(None)
     ["snapshot", "--record", path] => snapshot(Some(path))
     ["watch", duration, path] => watch(seconds(duration), path)
     ["replay", path] =>
       replay(@journal.parse(@native.read_text(path)), "recorded-datagrams")
+    ["family", name] => family(name, None)
+    ["family", name, "--record", path] => family(name, Some(path))
+    ["family-replay", path] =>
+      family_replay(@journal.parse(@native.read_text(path)))
     ["demo"] => replay(@scenarios.trace(), "synthetic-demo")
     _ => raise @wire.ProtocolError("invalid arguments; use --help")
   }

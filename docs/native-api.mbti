@@ -2,6 +2,7 @@
 package "Magic486/moonnetlink/native"
 
 import {
+  "Magic486/moonnetlink/genl",
   "Magic486/moonnetlink/route",
   "Magic486/moonnetlink/wire",
   "moonbitlang/core/debug",
@@ -39,6 +40,14 @@ pub(all) struct Capture {
 pub fn Capture::to_json(Self) -> Json
 pub fn Capture::to_repr(Self) -> @debug.Repr
 
+pub(all) struct FamilyCapture {
+  family : @genl.Family
+  datagrams : Array[Bytes]
+  endian : @wire.Endian
+} derive(ToJson, @debug.Debug)
+pub fn FamilyCapture::to_json(Self) -> Json
+pub fn FamilyCapture::to_repr(Self) -> @debug.Repr
+
 type Handle
 
 pub(all) enum Protocol {
@@ -57,6 +66,7 @@ pub struct Socket {
 }
 pub fn Socket::close(Self) -> Unit
 pub fn Socket::dump(Self, @route.ObjectKind, timeout_ms? : Int) -> Capture raise
+pub fn Socket::family(Self, String, timeout_ms? : Int) -> FamilyCapture raise
 pub fn Socket::open(groups? : UInt, protocol? : Protocol) -> Self raise NativeError
 pub fn Socket::receive(Self, timeout_ms? : Int) -> Bytes? raise
 pub fn Socket::send(Self, @wire.Message) -> Unit raise
