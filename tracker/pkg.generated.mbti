@@ -38,12 +38,13 @@ pub struct State {
   links : Map[Int, @route.Link]
   addresses : Map[String, @route.Address]
   routes : Map[String, @route.Route]
+  route_interfaces : Map[String, Array[Int]]
   neighbors : Map[String, @route.Neighbor]
   mut stale : Bool
   reasons : Array[String]
   mut applied_events : Int
 } derive(@debug.Debug)
-pub fn State::apply(Self, @route.Event) -> Unit
+pub fn State::apply(Self, @route.Event, endian? : @wire.Endian) -> Unit
 pub fn State::ingest(Self, Bytes, endian? : @wire.Endian) -> Unit raise @wire.ProtocolError
 pub fn State::mark_stale(Self, String) -> Unit
 pub fn State::new() -> Self

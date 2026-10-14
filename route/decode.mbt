@@ -50,6 +50,9 @@ fn decode_route(
   let source_prefix = data[2].to_int()
   validate_prefix(family, destination_prefix)
   validate_prefix(family, source_prefix)
+  if @wire.find_attribute(attrs, 9) is Some(attribute) {
+    ignore(decode_next_hops(attribute.payload, family, endian~))
+  }
   {
     family,
     destination_prefix,

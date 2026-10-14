@@ -16,6 +16,7 @@ pub struct State {
   links : Map[Int32, @route.Link]
   addresses : Map[String, @route.Address]
   routes : Map[String, @route.Route]
+  route_interfaces : Map[String, Array[Int32]]
   neighbors : Map[String, @route.Neighbor]
   mut stale : Bool
   reasons : Array[String]
@@ -28,6 +29,7 @@ pub fn State::new() -> State {
     links: {},
     addresses: {},
     routes: {},
+    route_interfaces: {},
     neighbors: {},
     stale: false,
     reasons: [],
@@ -63,7 +65,26 @@ fn neighbor_key(n : @route.Neighbor) -> String {
 }
 
 ///|
-pub fn State::apply(self : State, event : @route.Event) -> Unit {
+pub fn State::apply(
+  self : State,
+  event : @route.Event,
+  endian~ : @wire.Endian = @wire.Little,
+) -> Unit {
+  let interfaces : Array[Int32] = []
+  if event is @route.RouteChanged(route, ..) {
+    let hops = route.next_hops(endian~) catch {
+      @wire.ProtocolError(reason) => {
+        self.mark_stale("malformed multipath: " + reason)
+        return
+      }
+    }
+    for hop in hops {
+      interfaces.push(hop.index)
+    }
+    if route.output_interface is Some(index) {
+      interfaces.push(index.reinterpret_as_int())
+    }
+  }
   self.applied_events += 1
   match event {
     @route.LinkChanged(link, deleted~) =>
@@ -79,9 +100,10 @@ pub fn State::apply(self : State, event : @route.Event) -> Unit {
             self.neighbors.remove(key)
           }
         }
-        for (key, route) in self.routes.to_array() {
-          if route.output_interface == Some(link.index.reinterpret_as_uint()) {
+        for (key, indexes) in self.route_interfaces.to_array() {
+          if indexes.contains(link.index) {
             self.routes.remove(key)
+            self.route_interfaces.remove(key)
           }
         }
       } else {
@@ -99,8 +121,10 @@ pub fn State::apply(self : State, event : @route.Event) -> Unit {
       let key = route_key(route)
       if deleted {
         self.routes.remove(key)
+        self.route_interfaces.remove(key)
       } else {
         self.routes[key] = route
+        self.route_interfaces[key] = interfaces
       }
     }
     @route.NeighborChanged(neighbor, deleted~) => {
@@ -141,7 +165,7 @@ pub fn State::ingest(
     }
   }
   for event in events {
-    self.apply(event)
+    self.apply(event, endian~)
   }
 }
 
