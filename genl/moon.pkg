@@ -1,3 +1,8 @@
 import {
   "Magic486/moonnetlink/wire",
+  "Magic486/moonnetlink/route",
 }
+
+import {
+  "Magic486/moonnetlink/scenarios",
+} for "test"

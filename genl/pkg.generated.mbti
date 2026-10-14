@@ -55,6 +55,28 @@ pub fn Group::not_equal(Self, Self) -> Bool
 pub fn Group::to_json(Self) -> Json
 pub fn Group::to_repr(Self) -> @debug.Repr
 
+pub struct Lookup {
+  sequence : UInt
+  name : String
+  mut family : Family?
+  mut acknowledged : Bool
+  mut status : LookupStatus
+}
+pub fn Lookup::accept(Self, @wire.Message, endian? : @wire.Endian) -> Bool raise @wire.ProtocolError
+pub fn Lookup::new(UInt, String) -> Self raise @wire.ProtocolError
+pub fn Lookup::result(Self) -> Family raise @wire.ProtocolError
+pub fn Lookup::status(Self) -> LookupStatus
+
+pub(all) enum LookupStatus {
+  Pending
+  Complete
+  Failed(String)
+} derive(Eq, ToJson, @debug.Debug)
+pub fn LookupStatus::equal(Self, Self) -> Bool
+pub fn LookupStatus::not_equal(Self, Self) -> Bool
+pub fn LookupStatus::to_json(Self) -> Json
+pub fn LookupStatus::to_repr(Self) -> @debug.Repr
+
 pub(all) struct Operation {
   id : UInt
   flags : UInt
