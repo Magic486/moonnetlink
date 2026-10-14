@@ -9,6 +9,8 @@ import {
 // Values
 pub fn decode(@wire.Message, endian? : @wire.Endian) -> Event raise @wire.ProtocolError
 
+pub fn decode_next_hops(Bytes, Int, endian? : @wire.Endian) -> Array[NextHop] raise @wire.ProtocolError
+
 pub fn hardware_address(Bytes) -> String
 
 pub fn ip_address(Bytes, Int) -> String raise @wire.ProtocolError
@@ -91,6 +93,18 @@ pub fn Neighbor::not_equal(Self, Self) -> Bool
 pub fn Neighbor::to_json(Self) -> Json
 pub fn Neighbor::to_repr(Self) -> @debug.Repr
 
+pub(all) struct NextHop {
+  index : Int
+  flags : Int
+  weight : Int
+  gateway : String?
+  attributes : Array[@wire.Attribute]
+} derive(Eq, ToJson, @debug.Debug)
+pub fn NextHop::equal(Self, Self) -> Bool
+pub fn NextHop::not_equal(Self, Self) -> Bool
+pub fn NextHop::to_json(Self) -> Json
+pub fn NextHop::to_repr(Self) -> @debug.Repr
+
 pub(all) enum ObjectKind {
   Links
   Addresses
@@ -121,6 +135,7 @@ pub(all) struct Route {
   attributes : Array[@wire.Attribute]
 } derive(Eq, ToJson, @debug.Debug)
 pub fn Route::equal(Self, Self) -> Bool
+pub fn Route::next_hops(Self, endian? : @wire.Endian) -> Array[NextHop] raise @wire.ProtocolError
 pub fn Route::not_equal(Self, Self) -> Bool
 pub fn Route::to_json(Self) -> Json
 pub fn Route::to_repr(Self) -> @debug.Repr
