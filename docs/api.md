@@ -14,7 +14,7 @@
 
 `@tracker.Dump::new(sequence, kind)` 创建事务。逐条 `accept(message, endian=...)`，不匹配 seq 返回 false。`status()` 为 Pending、Complete 或 Failed。只有成功 DONE 后 `result()` 才返回结果；ACK 不结束事务，中断、负错误和错误对象类型使事务失败。
 
-`@tracker.State::new()` 创建部分观察缓存。`ingest(bytes, endian=...)` 完整验证一份报文后应用事件；`apply(event)` 接受已解码事件。`mark_stale(reason)` 记录不可自动恢复的失效原因，`view()` 返回对象数组、starts_partial、stale、reasons 和 applied_events。数组是视图快照，嵌套属性没有深复制保证。复杂路由替换/通配删除应重新查询，不能将事件缓存当作 Linux 路由数据库的完整实现。
+`@tracker.State::new()` 创建部分观察缓存。`ingest(bytes, endian=...)` 完整验证一份报文后应用事件；`apply(event, endian=...)` 接受已解码事件并保留多路径路由的原始端序。`mark_stale(reason)` 记录不可自动恢复的失效原因，`view()` 返回对象数组、starts_partial、stale、reasons 和 applied_events。输入及输出的可变属性数组均复制，修改调用方数组不会改变缓存；不可变 Bytes 可共享。复杂路由替换/通配删除应重新查询，不能将事件缓存当作 Linux 路由数据库的完整实现。
 
 ## 记录格式
 

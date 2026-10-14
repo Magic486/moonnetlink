@@ -107,14 +107,14 @@ pub fn State::apply(
           }
         }
       } else {
-        self.links[link.index] = link
+        self.links[link.index] = own_link(link)
       }
     @route.AddressChanged(address, deleted~) => {
       let key = address_key(address)
       if deleted {
         self.addresses.remove(key)
       } else {
-        self.addresses[key] = address
+        self.addresses[key] = own_address(address)
       }
     }
     @route.RouteChanged(route, deleted~) => {
@@ -123,7 +123,7 @@ pub fn State::apply(
         self.routes.remove(key)
         self.route_interfaces.remove(key)
       } else {
-        self.routes[key] = route
+        self.routes[key] = own_route(route)
         self.route_interfaces[key] = interfaces
       }
     }
@@ -132,7 +132,7 @@ pub fn State::apply(
       if deleted {
         self.neighbors.remove(key)
       } else {
-        self.neighbors[key] = neighbor
+        self.neighbors[key] = own_neighbor(neighbor)
       }
     }
     @route.Overrun => self.mark_stale("Netlink overrun: events lost")
@@ -170,13 +170,13 @@ pub fn State::ingest(
 }
 
 ///|
-/// Returns owned arrays; callers cannot mutate the reducer's maps through this view.
+/// Copies object arrays and attribute arrays. Immutable Bytes can be safely shared.
 pub fn State::view(self : State) -> View {
   {
-    links: self.links.values().to_array(),
-    addresses: self.addresses.values().to_array(),
-    routes: self.routes.values().to_array(),
-    neighbors: self.neighbors.values().to_array(),
+    links: self.links.values().to_array().map(own_link),
+    addresses: self.addresses.values().to_array().map(own_address),
+    routes: self.routes.values().to_array().map(own_route),
+    neighbors: self.neighbors.values().to_array().map(own_neighbor),
     stale: self.stale,
     starts_partial: true,
     reasons: self.reasons.copy(),
