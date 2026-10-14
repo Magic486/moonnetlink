@@ -36,14 +36,20 @@ fn snapshot(record_path : String?) -> Unit raise {
 
 ///|
 fn replay(records : Array[@journal.Record], source : String) -> Unit raise {
-  let state = @tracker.State::new()
+  let session = @replay.Session::new()
   for record in records {
-    match record {
-      @journal.Datagram(data, endian) => state.ingest(data, endian~)
-      @journal.Loss(reason) => state.mark_stale(reason)
-    }
+    session.apply(record)
   }
-  emit({ "kind": "replay", "source": source, "state": state.view().to_json() })
+  let summary = session.summary()
+  emit({
+    "kind": "replay",
+    "source": source,
+    "state": summary.state.to_json(),
+    "records": summary.records,
+    "datagrams": summary.datagrams,
+    "losses": summary.losses,
+    "rejected": summary.rejected,
+  })
 }
 
 ///|

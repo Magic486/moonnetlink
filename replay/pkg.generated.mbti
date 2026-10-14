@@ -1,0 +1,43 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Magic486/moonnetlink/replay"
+
+import {
+  "Magic486/moonnetlink/journal",
+  "Magic486/moonnetlink/tracker",
+  "Magic486/moonnetlink/wire",
+  "moonbitlang/core/debug",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct Session {
+  state : @tracker.State
+  mut records : Int
+  mut datagrams : Int
+  mut losses : Int
+  mut rejected : Int
+}
+pub fn Session::apply(Self, @journal.Record) -> Unit raise @wire.ProtocolError
+pub fn Session::apply_line(Self, String) -> Unit raise @wire.ProtocolError
+pub fn Session::feed(Self, String) -> Unit raise @wire.ProtocolError
+pub fn Session::new() -> Self
+pub fn Session::summary(Self) -> Summary
+
+pub(all) struct Summary {
+  records : Int
+  datagrams : Int
+  losses : Int
+  rejected : Int
+  state : @tracker.View
+} derive(Eq, ToJson, @debug.Debug)
+pub fn Summary::equal(Self, Self) -> Bool
+pub fn Summary::not_equal(Self, Self) -> Bool
+pub fn Summary::to_json(Self) -> Json
+pub fn Summary::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits
